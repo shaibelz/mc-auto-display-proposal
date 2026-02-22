@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auto Display Currency — Scaling Proposal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #ffffff;
+    color: #1a1a2e;
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  .deck { width: 100vw; height: 100vh; position: relative; }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 56px 90px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+
+  .slide.active { opacity: 1; pointer-events: auto; }
+
+  .slide-number {
+    position: absolute;
+    bottom: 30px;
+    right: 50px;
+    font-size: 14px;
+    color: #bbb;
+    font-weight: 500;
+  }
+
+  h1 { font-size: 50px; font-weight: 800; line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 20px; color: #1a1a2e; }
+  h2 { font-size: 36px; font-weight: 700; line-height: 1.25; letter-spacing: -0.5px; margin-bottom: 24px; color: #1a1a2e; }
+  h3 { font-size: 18px; font-weight: 600; margin-bottom: 14px; color: #999; text-transform: uppercase; letter-spacing: 2px; }
+
+  p, li { font-size: 20px; line-height: 1.7; color: #555; font-weight: 400; }
+
+  ul { list-style: none; padding: 0; }
+  ul li { padding: 8px 0; padding-left: 26px; position: relative; }
+  ul li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 18px;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: #2563eb;
+  }
+
+  .accent { color: #2563eb; }
+  .warn { color: #d97706; }
+  .danger { color: #dc2626; }
+  .success { color: #16a34a; }
+
+  .subtitle { font-size: 22px; color: #888; font-weight: 400; margin-top: 10px; line-height: 1.5; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; margin-top: 16px; }
+
+  .callout {
+    background: rgba(37,99,235,0.06);
+    border-left: 4px solid #2563eb;
+    border-radius: 0 12px 12px 0;
+    padding: 20px 28px;
+    margin-top: 24px;
+  }
+  .callout p { color: #444; font-size: 18px; }
+
+  .callout-red {
+    background: rgba(220,38,38,0.05);
+    border-left: 4px solid #dc2626;
+    border-radius: 0 12px 12px 0;
+    padding: 20px 28px;
+    margin-top: 24px;
+  }
+  .callout-red p { color: #444; font-size: 18px; }
+
+  .callout-amber {
+    background: rgba(217,119,6,0.06);
+    border-left: 4px solid #d97706;
+    border-radius: 0 12px 12px 0;
+    padding: 20px 28px;
+    margin-top: 24px;
+  }
+  .callout-amber p { color: #444; font-size: 18px; }
+
+  .separator { width: 60px; height: 3px; background: #2563eb; border-radius: 2px; margin: 16px 0; }
+
+  /* ---- Progress bar ---- */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #2563eb;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 200;
+  }
+
+  .nav {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 100;
+  }
+
+  .nav-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #ddd;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none; padding: 0;
+  }
+
+  .nav-dot.active {
+    background: #2563eb;
+    width: 32px;
+    border-radius: 5px;
+  }
+
+  .key-hint {
+    position: fixed;
+    bottom: 30px;
+    left: 50px;
+    font-size: 13px;
+    color: #ccc;
+  }
+
+  /* ---- Staggered reveal animations ---- */
+  .slide [data-anim] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .slide.active [data-anim] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .slide.active [data-anim="1"] { transition-delay: 0.1s; }
+  .slide.active [data-anim="2"] { transition-delay: 0.25s; }
+  .slide.active [data-anim="3"] { transition-delay: 0.4s; }
+  .slide.active [data-anim="4"] { transition-delay: 0.55s; }
+  .slide.active [data-anim="5"] { transition-delay: 0.7s; }
+  .slide.active [data-anim="6"] { transition-delay: 0.85s; }
+
+  /* ---- Gantt ---- */
+  .gantt {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .gantt-row {
+    display: grid;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .gantt-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #888;
+    text-align: right;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .gantt-track {
+    position: relative;
+    height: 40px;
+    background: #f0f0f0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .gantt-bar {
+    position: absolute;
+    top: 4px; bottom: 4px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .gantt-bar-amber {
+    background: rgba(217,119,6,0.15);
+    border: 1px solid rgba(217,119,6,0.3);
+    color: #b45309;
+  }
+
+  .gantt-axis {
+    display: grid;
+    gap: 16px;
+    margin-top: 2px;
+  }
+
+  .gantt-axis-track {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #aaa;
+    font-weight: 500;
+    padding: 0 4px;
+  }
+
+  /* ---- Phases ---- */
+  .phases {
+    display: flex;
+    gap: 0;
+    margin-top: 20px;
+  }
+
+  .phase {
+    flex: 1;
+    padding: 28px 24px;
+    background: #fafafa;
+    border: 1px solid #e5e5e5;
+  }
+
+  .phase:first-child { border-radius: 14px 0 0 14px; }
+  .phase:last-child { border-radius: 0 14px 14px 0; border-left: none; }
+
+  .phase-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .phase h4 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .phase p {
+    font-size: 16px;
+    color: #777;
+    line-height: 1.6;
+  }
+
+  .phase ul li { font-size: 17px; padding: 5px 0 5px 22px; }
+  .phase ul li::before { top: 14px; width: 7px; height: 7px; }
+
+  /* ---- Stats row ---- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .stat {
+    background: #131313;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .stat .val {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+  }
+
+  .stat .label {
+    font-size: 13px;
+    color: #777;
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  /* ---- Risk table ---- */
+  .risk-balance {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .risk-side {
+    background: #131313;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  .risk-side h4 {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 14px;
+  }
+
+  .risk-side ul li { font-size: 17px; padding: 5px 0 5px 22px; }
+  .risk-side ul li::before { top: 14px; width: 7px; height: 7px; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+<div class="deck" id="deck">
+
+  <!-- SLIDE 0: Title -->
+  <div class="slide active" data-slide="0">
+    <h3 data-anim="1">Multi Currency</h3>
+    <h1 data-anim="2">Default On Is Blocked.<br><span class="accent">Here's How We Unblock It.</span></h1>
+    <div class="separator" data-anim="3"></div>
+    <p class="subtitle" data-anim="4">Auto Display Currency — our H1 critical path — is stuck at a 20-merchant pilot.<br>We need to move faster. Responsibly.</p>
+    <span class="slide-number">1 / 5</span>
+  </div>
+
+  <!-- SLIDE 1: The Pain + Solution -->
+  <div class="slide" data-slide="1">
+    <h3 data-anim="1">The Problem We're Solving</h3>
+    <h2 data-anim="2">11% of our GPV is cross-border.<br><span class="accent">Those customers are seeing prices in a foreign currency.</span></h2>
+
+    <div style="display: grid; grid-template-columns: 1fr auto; gap: 50px; align-items: center; margin-top: 24px;">
+      <div>
+        <ul>
+          <li data-anim="3">Foreign currency at checkout <strong style="color:#1a1a2e;">kills trust and increases abandonment</strong></li>
+          <li data-anim="4">Today, those users have a currency converter — a manual, often hidden widget that requires customers to find and switch themselves</li>
+          <li data-anim="5">Auto-displaying local currency fixes this — and <strong style="color:#1a1a2e;">we already built the solution</strong></li>
+          <li data-anim="6">It also enables <strong class="accent">"default on"</strong> — merchants get Multi Currency without lifting a finger</li>
+        </ul>
+      </div>
+      <div data-anim="3">
+        <img src="currency-selector.png" alt="Currency selector widget" style="width: 280px; border-radius: 12px; border: 1px solid #e0e0e0; box-shadow: 0 8px 32px rgba(0,0,0,0.08);">
+      </div>
+    </div>
+    <span class="slide-number">2 / 5</span>
+  </div>
+
+  <!-- SLIDE 2: Current State -->
+  <div class="slide" data-slide="2">
+    <h3 data-anim="1">Why We're Stuck</h3>
+    <h2 data-anim="2"><span class="success">Positive early signal</span>, but n=20 is <span class="warn">too noisy to act on</span></h2>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 12px;">
+      <div>
+        <ul>
+          <li data-anim="3">Pilot: ~20 MC merchants, &lt;20% SEO traffic</li>
+          <li data-anim="3">Conversion signal: <strong style="color:#1a1a2e;">+5% to +25%</strong> — normal volatility at this scale</li>
+          <li data-anim="4">SEO's caution is understandable — organic traffic is critical for merchant success. But the risk is <strong class="warn">real yet unquantified</strong>, which makes it hard to align on the right pace</li>
+        </ul>
+      </div>
+      <div>
+        <p data-anim="3" style="font-size: 14px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px;">Time to learn (running in parallel)</p>
+        <div class="gantt" data-anim="4">
+          <div class="gantt-row" style="grid-template-columns: 120px 1fr;">
+            <div class="gantt-label">Conversion</div>
+            <div class="gantt-track">
+              <div class="gantt-bar gantt-bar-amber" style="left: 0; width: 50%;">~3 mo</div>
+            </div>
+          </div>
+          <div class="gantt-row" style="grid-template-columns: 120px 1fr;">
+            <div class="gantt-label">SEO clarity</div>
+            <div class="gantt-track">
+              <div class="gantt-bar gantt-bar-amber" style="left: 0; width: 100%;">3–6 mo</div>
+            </div>
+          </div>
+        </div>
+        <div class="gantt-axis" style="grid-template-columns: 120px 1fr;">
+          <div></div>
+          <div class="gantt-axis-track">
+            <span>Now</span>
+            <span>3 mo</span>
+            <span>6 mo</span>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 14px; font-size: 15px; font-weight: 700; color: #dc2626;">Up to 6 months — from 20 merchants</div>
+      </div>
+    </div>
+    <div class="callout-red" data-anim="5" style="margin-top: 20px;">
+      <p>n=20 is <strong style="color:#1a1a2e;">too small to prove conversion and too small to resolve the SEO debate</strong>. We need to scale the test to move forward — with the right guardrails.</p>
+    </div>
+    <span class="slide-number">3 / 5</span>
+  </div>
+
+  <!-- SLIDE 3: The Proposal -->
+  <div class="slide" data-slide="3">
+    <h3 data-anim="1">The Way Forward</h3>
+    <h2 data-anim="2">Expand to <span class="accent">~800 MC merchants</span> (&lt;30% SEO traffic)<br>with pre-notice &amp; opt-out</h2>
+
+    <p data-anim="3" style="font-size: 19px; color: #999; margin-bottom: 4px;">These merchants don't primarily rely on SEO (&lt;30% of traffic). <strong style="color:#1a1a2e;">800 merchants = 40x the current sample — conversion significance in weeks.</strong></p>
+
+    <div class="phases" data-anim="4" style="margin-top: 20px;">
+      <div class="phase" style="border-color: rgba(37,99,235,0.3); background: rgba(37,99,235,0.04);">
+        <div class="phase-label accent">Phase 1 — Now</div>
+        <h4>~800 MC merchants (&lt;30% SEO traffic)</h4>
+        <ul style="margin-top: 8px;">
+          <li><strong style="color:#1a1a2e;">Pre-notify</strong> every merchant before anything changes</li>
+          <li><strong style="color:#1a1a2e;">Disclose</strong> potential SEO impact</li>
+          <li><strong style="color:#1a1a2e;">Clear opt-out</strong> before activation</li>
+          <li><strong style="color:#1a1a2e;">Reach conversion significance</strong> in weeks, not months</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="phase-label" style="color: #888;">Phase 2 — Data-Driven</div>
+        <h4>Decision on full PbW population</h4>
+        <p style="margin-top: 8px;">Use Phase 1 data to make an informed call on the entire Payments by Wix merchant base.</p>
+      </div>
+    </div>
+    <span class="slide-number">4 / 5</span>
+  </div>
+
+  <!-- SLIDE 4: The Ask -->
+  <div class="slide" data-slide="4">
+    <h3 data-anim="1">The Ask</h3>
+    <h2 data-anim="2">Approve the <span class="accent">pre-notice &amp; opt-out</span> expansion<br>so we can align with SEO and move to Phase 1</h2>
+    <div class="separator" data-anim="3" style="margin: 16px 0;"></div>
+    <div data-anim="3" style="max-width: 840px;">
+      <ul>
+        <li style="font-size: 22px; color: #444;">Approve <strong class="accent">pre-notice &amp; opt-out</strong> for MC merchants with &lt;30% SEO traffic</li>
+        <li style="font-size: 22px; color: #444;">Unblocks the <strong style="color:#1a1a2e;">critical path to Default On</strong> — our H1 commitment</li>
+      </ul>
+    </div>
+
+    <div class="callout-amber" data-anim="4" style="margin-top: 32px; max-width: 840px;">
+      <p>And if we want a more conservative first step — <strong style="color:#1a1a2e;">~580 merchants at &lt;20% SEO traffic</strong> is also viable. Either way, we need to move beyond 20.</p>
+    </div>
+
+    <span class="slide-number">5 / 5</span>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav" id="nav"></div>
+<div class="key-hint">← → arrow keys to navigate</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const nav = document.getElementById('nav');
+  let current = 0;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goTo(i);
+    nav.appendChild(dot);
+  });
+
+  const progress = document.getElementById('progress');
+
+  function goTo(n) {
+    if (n < 0 || n >= slides.length) return;
+    slides[current].querySelectorAll('[data-anim]').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(18px)';
+    });
+    slides[current].classList.remove('active');
+    nav.children[current].classList.remove('active');
+    current = n;
+    slides[current].querySelectorAll('[data-anim]').forEach(el => {
+      el.style.opacity = '';
+      el.style.transform = '';
+    });
+    slides[current].classList.add('active');
+    nav.children[current].classList.add('active');
+    progress.style.width = ((current / (slides.length - 1)) * 100) + '%';
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+    if (e.key === 'ArrowLeft') goTo(current - 1);
+  });
+
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => touchStartX = e.touches[0].clientX);
+  document.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) diff > 0 ? goTo(current + 1) : goTo(current - 1);
+  });
+</script>
+
+</body>
+</html>
