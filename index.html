@@ -324,8 +324,18 @@
 </head>
 <body>
 
+<div id="lock-screen" style="position:fixed;inset:0;background:#fff;z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div style="text-align:center;">
+    <div style="font-size:14px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;">Password Required</div>
+    <input id="pw-input" type="password" placeholder="Enter password" autofocus
+      style="font-family:Inter,sans-serif;font-size:18px;padding:14px 24px;border:2px solid #e0e0e0;border-radius:12px;outline:none;width:280px;text-align:center;transition:border-color 0.2s;"
+      onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='#e0e0e0'">
+    <div id="pw-error" style="color:#dc2626;font-size:14px;margin-top:10px;opacity:0;transition:opacity 0.3s;">Incorrect password</div>
+  </div>
+</div>
+
 <div class="progress-bar" id="progress"></div>
-<div class="deck" id="deck">
+<div class="deck" id="deck" style="display:none;">
 
   <!-- SLIDE 0: Title -->
   <div class="slide active" data-slide="0">
@@ -462,6 +472,26 @@
 <div class="key-hint">← → arrow keys to navigate</div>
 
 <script>
+  const PASS_HASH = '5e5a6e2b047ef44aa6eaborebf7c8e3c';
+  function checkPw() {
+    const input = document.getElementById('pw-input');
+    if (input.value === 'Na32basdj2') {
+      document.getElementById('lock-screen').style.display = 'none';
+      document.getElementById('deck').style.display = '';
+      document.getElementById('progress').style.display = '';
+    } else {
+      document.getElementById('pw-error').style.opacity = '1';
+      input.style.borderColor = '#dc2626';
+      setTimeout(() => {
+        document.getElementById('pw-error').style.opacity = '0';
+        input.style.borderColor = '#e0e0e0';
+      }, 2000);
+    }
+  }
+  document.getElementById('pw-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkPw();
+  });
+
   const slides = document.querySelectorAll('.slide');
   const nav = document.getElementById('nav');
   let current = 0;
