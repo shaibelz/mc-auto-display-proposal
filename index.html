@@ -441,42 +441,38 @@
   <!-- SLIDE 3: Competitive Landscape -->
   <div class="slide" data-slide="3">
     <h3 data-anim="1">Industry Context</h3>
-    <h2 data-anim="2">Geo-based currency display is <span class="accent">standard practice</span> —<br>and Google says it's <span class="accent">not cloaking</span></h2>
+    <h2 data-anim="2">Auto-displaying local currency is <span class="accent">industry standard</span>.<br>Every major platform does it.</h2>
 
-    <div data-anim="3" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px;">
-      <div style="background: #fafafa; border: 1px solid #e5e5e5; border-radius: 12px; padding: 22px;">
-        <div style="font-size: 14px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px;">How competitors do it</div>
-        <table style="width: 100%; font-size: 15px; border-collapse: collapse;">
-          <tr style="border-bottom: 1px solid #eee;">
-            <td style="padding: 8px 0; font-weight: 600; color: #1a1a2e; width: 110px;">Shopify</td>
-            <td style="padding: 8px 0; color: #555;">GeoIP auto-display via Markets. On shared domains, geo content is <strong style="color:#1a1a2e;">not indexed</strong> — they accept the SEO tradeoff.</td>
-          </tr>
-          <tr style="border-bottom: 1px solid #eee;">
-            <td style="padding: 8px 0; font-weight: 600; color: #1a1a2e;">WooCommerce</td>
-            <td style="padding: 8px 0; color: #555;">Plugins (WPML, Aelia, etc.) auto-switch via GeoIP. <strong style="color:#1a1a2e;">No prominent SEO disclosure</strong> to merchants. Schema mismatch is a known, unsolved issue.</td>
-          </tr>
-          <tr style="border-bottom: 1px solid #eee;">
-            <td style="padding: 8px 0; font-weight: 600; color: #1a1a2e;">BigCommerce</td>
-            <td style="padding: 8px 0; color: #555;">Built-in geo-detection. Multi-currency with hreflang and canonical tags.</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; font-weight: 600; color: #1a1a2e;">Amazon</td>
-            <td style="padding: 8px 0; color: #555;">Uses card-issuing country for currency. Separate marketplace domains per region.</td>
-          </tr>
-        </table>
+    <div data-anim="3" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 24px;">
+      <div style="background: #fafafa; border: 1px solid #e5e5e5; border-radius: 12px; padding: 22px; text-align: center;">
+        <div style="font-size: 20px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px;">Shopify</div>
+        <div style="font-size: 15px; color: #555; line-height: 1.5;">Auto-detects location and shows local currency</div>
       </div>
-      <div style="display: flex; flex-direction: column; gap: 16px;">
-        <div data-anim="4" style="background: #f5f7ff; border: 1px solid #c7d6f5; border-radius: 12px; padding: 22px;">
-          <div style="font-size: 14px; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px;">Google's stance</div>
-          <p style="font-size: 16px; color: #444; line-height: 1.6; margin: 0;">Changing <strong style="color:#1a1a2e;">price display</strong> based on geo is <strong style="color:#1a1a2e;">not cloaking</strong> — as long as core content stays the same. Google only crawls one version and won't see different prices.</p>
-          <p style="font-size: 16px; color: #444; line-height: 1.6; margin: 8px 0 0 0;">What <em>is</em> cloaking: <strong style="color:#dc2626;">detecting bots and serving them different content</strong>.</p>
-        </div>
-        <div data-anim="5" style="background: rgba(22,163,106,0.06); border: 1px solid rgba(22,163,106,0.25); border-radius: 12px; padding: 22px;">
-          <div style="font-size: 14px; font-weight: 700; color: #16a34a; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px;">Our approach</div>
-          <p style="font-size: 16px; color: #444; line-height: 1.6; margin: 0;">Canonical HTML in business currency, client-side JS swap for visitors. <strong style="color:#1a1a2e;">Standard pattern</strong> — aligned with how competitors and Google guidelines handle it.</p>
-        </div>
+      <div style="background: #fafafa; border: 1px solid #e5e5e5; border-radius: 12px; padding: 22px; text-align: center;">
+        <div style="font-size: 20px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px;">WooCommerce</div>
+        <div style="font-size: 15px; color: #555; line-height: 1.5;">Auto-switches currency by visitor location — with no SEO warning to merchants</div>
+      </div>
+      <div style="background: #fafafa; border: 1px solid #e5e5e5; border-radius: 12px; padding: 22px; text-align: center;">
+        <div style="font-size: 20px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px;">BigCommerce</div>
+        <div style="font-size: 15px; color: #555; line-height: 1.5;">Built-in geo-detection with local currency display</div>
+      </div>
+      <div style="background: #fafafa; border: 1px solid #e5e5e5; border-radius: 12px; padding: 22px; text-align: center;">
+        <div style="font-size: 20px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px;">Amazon</div>
+        <div style="font-size: 15px; color: #555; line-height: 1.5;">Shows local currency automatically based on customer region</div>
       </div>
     </div>
+
+    <div data-anim="4" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px;">
+      <div style="background: #f5f7ff; border: 1px solid #c7d6f5; border-radius: 12px; padding: 22px;">
+        <div style="font-size: 15px; font-weight: 700; color: #2563eb; margin-bottom: 8px;">Google's position</div>
+        <p style="font-size: 16px; color: #444; line-height: 1.6; margin: 0;">Showing local currency based on visitor location is <strong style="color:#1a1a2e;">not a violation</strong> — as long as the page content stays the same. Only the price display changes.</p>
+      </div>
+      <div data-anim="5" style="background: rgba(22,163,106,0.06); border: 1px solid rgba(22,163,106,0.25); border-radius: 12px; padding: 22px;">
+        <div style="font-size: 15px; font-weight: 700; color: #16a34a; margin-bottom: 8px;">Our approach</div>
+        <p style="font-size: 16px; color: #444; line-height: 1.6; margin: 0;">Same approach as competitors. We're <strong style="color:#1a1a2e;">not inventing something new</strong> — we're catching up to what the industry already does.</p>
+      </div>
+    </div>
+
     <span class="slide-number">4 / 5</span>
   </div>
 
