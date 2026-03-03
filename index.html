@@ -441,21 +441,31 @@
   <!-- SLIDE 3: Competitive Landscape -->
   <div class="slide" data-slide="3">
     <h3 data-anim="1">Industry Context</h3>
-    <h2 data-anim="2">Auto-displaying local currency is <span class="accent">industry standard</span>.<br>Every major platform does it.</h2>
+    <h2 data-anim="2">Auto-displaying local currency is <span class="accent">industry standard</span>.<br>Two approaches exist in the market.</h2>
 
-    <div data-anim="3" style="background: #fafafa; border: 1px solid #e5e5e5; border-radius: 12px; padding: 28px 32px; margin-top: 24px;">
-      <p style="font-size: 19px; color: #444; line-height: 1.6; margin: 0;">Shopify, WooCommerce, BigCommerce, and Amazon all do the same thing: <strong style="color:#1a1a2e;">detect where the visitor is and automatically show prices in their local currency.</strong></p>
-      <p style="font-size: 17px; color: #888; margin: 12px 0 0 0;">This is table stakes for international ecommerce. We're the ones catching up.</p>
+    <div data-anim="3" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px;">
+      <div style="background: #fafafa; border: 1px solid #e5e5e5; border-radius: 14px; padding: 26px;">
+        <div style="font-size: 15px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px;">Approach A — Separate URLs per market</div>
+        <div style="font-size: 20px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px;">Shopify</div>
+        <p style="font-size: 16px; color: #555; line-height: 1.6; margin: 0;">Creates a separate URL for each market (e.g. <code style="background:#eee;padding:2px 6px;border-radius:4px;font-size:14px;">/en-ca/</code>). Each version has the correct currency baked in. Google can index each version separately.</p>
+        <p style="font-size: 15px; color: #888; line-height: 1.5; margin: 12px 0 0 0;">Better for SEO — but requires significant infrastructure investment.</p>
+      </div>
+      <div style="background: #f5f7ff; border: 1px solid #c7d6f5; border-radius: 14px; padding: 26px;">
+        <div style="font-size: 15px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px;">Approach B — Same URL, display swap</div>
+        <div style="font-size: 20px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px;">WooCommerce, BigCommerce, Wix</div>
+        <p style="font-size: 16px; color: #555; line-height: 1.6; margin: 0;">Same page URL. Visitor sees local currency, Google sees the default currency. <strong style="color:#1a1a2e;">No change to what Google indexes — zero regression.</strong></p>
+        <p style="font-size: 15px; color: #888; line-height: 1.5; margin: 12px 0 0 0;">Most common approach. Lighter to implement. Accepted by Google.</p>
+      </div>
     </div>
 
-    <div data-anim="4" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px;">
-      <div style="background: #f5f7ff; border: 1px solid #c7d6f5; border-radius: 12px; padding: 22px;">
-        <div style="font-size: 15px; font-weight: 700; color: #2563eb; margin-bottom: 8px;">Google's position</div>
-        <p style="font-size: 16px; color: #444; line-height: 1.6; margin: 0;">Showing local currency based on visitor location is <strong style="color:#1a1a2e;">not a violation</strong> — as long as the page content stays the same. Only the price display changes.</p>
+    <div data-anim="4" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px;">
+      <div style="background: rgba(22,163,106,0.06); border: 1px solid rgba(22,163,106,0.25); border-radius: 12px; padding: 20px;">
+        <div style="font-size: 15px; font-weight: 700; color: #16a34a; margin-bottom: 6px;">Google's position</div>
+        <p style="font-size: 15px; color: #444; line-height: 1.6; margin: 0;">Showing local currency to visitors while Google sees the default is <strong style="color:#1a1a2e;">not a violation</strong>. Google only crawls one version — nothing changes for them.</p>
       </div>
-      <div data-anim="5" style="background: rgba(22,163,106,0.06); border: 1px solid rgba(22,163,106,0.25); border-radius: 12px; padding: 22px;">
-        <div style="font-size: 15px; font-weight: 700; color: #16a34a; margin-bottom: 8px;">Our approach</div>
-        <p style="font-size: 16px; color: #444; line-height: 1.6; margin: 0;">Same approach as competitors. We're <strong style="color:#1a1a2e;">not inventing something new</strong> — we're catching up to what the industry already does.</p>
+      <div data-anim="5" style="background: #fafafa; border: 1px solid #e5e5e5; border-radius: 12px; padding: 20px;">
+        <div style="font-size: 15px; font-weight: 700; color: #2563eb; margin-bottom: 6px;">Path forward</div>
+        <p style="font-size: 15px; color: #444; line-height: 1.6; margin: 0;">We start with Approach B (proven, no SEO regression). If product numbers justify it, we can invest in Approach A for the SEO upside down the road.</p>
       </div>
     </div>
 
