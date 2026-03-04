@@ -446,28 +446,28 @@
     <div data-anim="3" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px;">
       <div style="background: #fafafa; border: 1px solid #e5e5e5; border-radius: 14px; padding: 26px;">
         <div style="font-size: 15px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px;">Approach A — Separate URLs per market</div>
-        <div style="font-size: 20px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px;">Shopify</div>
+        <div style="font-size: 20px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px;">Shopify (dedicated domains)</div>
         <p style="font-size: 16px; color: #555; line-height: 1.6; margin: 0;">Creates a separate URL for each market (e.g. <code style="background:#eee;padding:2px 6px;border-radius:4px;font-size:14px;">/en-ca/</code>). Each version has the correct currency baked in. Google can index each version separately.</p>
-        <p style="font-size: 15px; color: #888; line-height: 1.5; margin: 12px 0 0 0;">Better for SEO — but requires significant infrastructure investment.</p>
-        <a href="https://help.shopify.com/en/manual/markets/automatic-redirection" target="_blank" style="font-size: 13px; color: #2563eb; text-decoration: none; border-bottom: 1px dashed #2563eb;">Shopify docs: Automatic storefront redirection &rarr;</a>
+        <p style="font-size: 15px; color: #888; line-height: 1.5; margin: 12px 0 0 0;">Google's recommended approach for regional targeting. Requires significant infrastructure investment.</p>
+        <a href="https://help.shopify.com/en/manual/markets/automatic-redirection#markets-that-use-dedicated-domains" target="_blank" style="font-size: 13px; color: #2563eb; text-decoration: none; border-bottom: 1px dashed #2563eb;">Shopify docs: Dedicated domains &rarr;</a>
       </div>
       <div style="background: #f5f7ff; border: 1px solid #c7d6f5; border-radius: 14px; padding: 26px;">
         <div style="font-size: 15px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px;">Approach B — Same URL, display swap</div>
-        <div style="font-size: 20px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px;">WooCommerce, Wix</div>
-        <p style="font-size: 16px; color: #555; line-height: 1.6; margin: 0;">Same page URL. The HTML that Google crawls stays unchanged (canonical, default currency). A client-side JS swap shows visitors their local currency after page load. <strong style="color:#1a1a2e;">Google never sees the swapped version.</strong></p>
-        <p style="font-size: 15px; color: #888; line-height: 1.5; margin: 12px 0 0 0;">Most common approach in the market. Lighter to implement.</p>
-        <a href="https://woocommerce.com/document/multi-currency/geolocation" target="_blank" style="font-size: 13px; color: #2563eb; text-decoration: none; border-bottom: 1px dashed #2563eb;">WooCommerce docs: Multi-currency Geolocation &rarr;</a>
+        <div style="font-size: 20px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px;">Shopify (shared domains), Wix</div>
+        <p style="font-size: 16px; color: #555; line-height: 1.6; margin: 0;">Same page URL. Visitor's currency is adjusted based on geolocation. The HTML that Google crawls stays unchanged — default currency only. <strong style="color:#1a1a2e;">Google never sees the adjusted version.</strong></p>
+        <p style="font-size: 15px; color: #888; line-height: 1.5; margin: 12px 0 0 0;">Shopify explicitly notes: "content isn't indexed by search engines" for this mode — meaning only the localized variation isn't indexed. The default page remains as-is.</p>
+        <a href="https://help.shopify.com/en/manual/markets/automatic-redirection#markets-that-use-shared-domains" target="_blank" style="font-size: 13px; color: #2563eb; text-decoration: none; border-bottom: 1px dashed #2563eb;">Shopify docs: Shared domains &rarr;</a>
       </div>
     </div>
 
     <div data-anim="4" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px;">
       <div style="background: rgba(22,163,106,0.06); border: 1px solid rgba(22,163,106,0.25); border-radius: 12px; padding: 20px;">
-        <div style="font-size: 15px; font-weight: 700; color: #16a34a; margin-bottom: 6px;">Google's documented guidance</div>
-        <p style="font-size: 15px; color: #444; line-height: 1.6; margin: 0;">Google's guidelines indicate that geo-based personalization of price display is <strong style="color:#1a1a2e;">not considered cloaking</strong>, as long as the core page content remains the same. Since the HTML Google crawls is unchanged, this aligns with their guidance.</p>
+        <div style="font-size: 15px; font-weight: 700; color: #16a34a; margin-bottom: 6px;">Why no SEO regression</div>
+        <p style="font-size: 15px; color: #444; line-height: 1.6; margin: 0;">Google's crawler sees <strong style="color:#1a1a2e;">only the default HTML with the original currency</strong>. The currency swap happens client-side, after page load. From Google's perspective, nothing has changed — the page it indexes is identical to before.</p>
       </div>
       <div data-anim="5" style="background: #fafafa; border: 1px solid #e5e5e5; border-radius: 12px; padding: 20px;">
         <div style="font-size: 15px; font-weight: 700; color: #2563eb; margin-bottom: 6px;">Path forward</div>
-        <p style="font-size: 15px; color: #444; line-height: 1.6; margin: 0;">We start with Approach B — the same model used by most competitors. If product numbers justify it, we can invest in Approach A (separate URLs) for additional SEO benefit down the road.</p>
+        <p style="font-size: 15px; color: #444; line-height: 1.6; margin: 0;">We start with Approach B — same as Shopify's shared-domain model. If product numbers justify it, we can invest in Approach A (separate URLs per market) for additional SEO benefit down the road.</p>
       </div>
     </div>
 
